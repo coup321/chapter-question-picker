@@ -1,0 +1,17 @@
+title: "elementary linear algebra"
+num_chapters: 11
+chapters: 
+  - name: "Systems of Linear Equations and Matrices"
+    number: 1
+    num_sections: 7
+    sections: 
+      - 1.1 : 15
+      - 1.2 : 32
+  - name: "Determinants"
+    number: 2
+    num_sections: 4
+    sections:
+      - 2.1 : 35
+      - 2.2 : 21 
+  
+
