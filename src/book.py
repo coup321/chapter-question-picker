@@ -18,22 +18,33 @@ class Chapter:
     sections: list
 
 @dataclass
-class Question
-##### START HERE 1/7
+class Section:
+    name: str or int
+    num_questions: int
+
     
 def parse_book(path):
+    #get chapters and sections from yaml
     chapters = []
+    sections = []
     with open(path) as f:
         doc = yaml.load(f, Loader=yaml.Loader)
     for C in doc['chapters']:
-        chapters.append(
-            Chapter(C['name'], C['num_sections'], C['sections']))
+        for section in C['sections']:
+            section_name, num_questions = section.popitem()
+            sections.append(Section(section_name, num_questions))
+
+        chapters.append(Chapter(C['name'], C['num_sections'], sections))
+
     book_title = doc['title']
     num_chapters = len(chapters)
     total_sections = sum([len(C.sections) for C in chapters])
     return Book(chapters, book_title, num_chapters, total_sections)
 
-#book = parse_book('books\linear_algebra.yaml')
+# book = parse_book('books\linear_algebra.yaml')
+# print(book.chapters[0].sections[0])
+
 #section_list = [c.sections for c in book.chapters]
-#print([item for sublist in section_list for item in sublist])
-#item for sublist in regular_list for item in sublist
+# with open('books\linear_algebra.yaml') as f:
+#     doc = yaml.load(f, Loader=yaml.Loader)
+# print(doc['chapters'][0]['sections'][0].popitem())

@@ -16,19 +16,25 @@ class QuestionSelector:
     self.num_questions = num_questions
     self.selection = None
 
-  def get_questions(self):
-    section_list = [chapter.sections for chapter in self.book.chapters]
-    return [item for sublist in section_list for item in sublist] #this comprehension flattens section_list
+  def get_chapters(self) -> list:
+    #return book chapters
+    return self.book.chapters
 
+  def get_sections(self) -> list:
+    #return list of all the questions
+    sections = []
+    for C in self.book.chapters:
+      sections += C.sections
+### START HERE
   def select_questions(self, n : int) -> dict:
     questions = self.get_questions()
     if not questions:
       raise ValueError('chapter_dict is empty')
 
     picked_questions = []
-    for question in range(n):
-      random_section = random.choice(list(self.chapter_dict.keys()))
-      random_question = random.randint(1,self.chapter_dict[random_section])
+    for question in questions:
+      random_section = random.choice([Q.name for Q in questions])
+      random_question = random.randint(1, question.num_questions)
       
       if random_section in picked_questions.keys():
         picked_questions[random_section] += [random_question]
@@ -48,12 +54,14 @@ class QuestionSelector:
     
 
   def new_chapter(self, dict):
-    #should add a new chapter to the yaml
+    #should add a new chapter
+    pass
+  def export_book(self):
+    #export book as yaml
     pass
 
   def total_questions(self):
-    questions = self.get_questions()
-    return sum([list(q.values())[0] for q in questions])
+    return sum([Q.num_questions for Q in self.get_questions()])
 
   def __call__(self, n):
     if n > self.total_questions():
@@ -63,7 +71,7 @@ class QuestionSelector:
 
   def __repr__(self):
     output = ''
-    for key, value in self.get_questions():
-      output += f'Chapter: {key} Number of questions: {value}\n'
+    for Q in self.get_questions():
+      output += f'Chapter: {Q.name} Number of questions: {Q.num_questions}\n'
     return output
     
