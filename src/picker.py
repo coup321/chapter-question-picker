@@ -25,21 +25,22 @@ class QuestionSelector:
     sections = []
     for C in self.book.chapters:
       sections += C.sections
-### START HERE
+    return sections
+
   def select_questions(self, n : int) -> dict:
-    questions = self.get_questions()
-    if not questions:
+    sections = self.get_sections()
+    if not sections:
       raise ValueError('chapter_dict is empty')
 
-    picked_questions = []
-    for question in questions:
-      random_section = random.choice([Q.name for Q in questions])
-      random_question = random.randint(1, question.num_questions)
+    picked_questions = dict()
+    for i in range(n):
+      random_section = random.choice(sections)
+      random_question = random.randint(1, random_section.num_questions)
       
-      if random_section in picked_questions.keys():
-        picked_questions[random_section] += [random_question]
+      if random_section.name in picked_questions.keys():
+        picked_questions[random_section.name] += [random_question]
       else:
-        picked_questions[random_section] = [random_question]
+        picked_questions[random_section.name] = [random_question]
 
     self.selection = picked_questions
     return picked_questions
@@ -61,7 +62,7 @@ class QuestionSelector:
     pass
 
   def total_questions(self):
-    return sum([Q.num_questions for Q in self.get_questions()])
+    return sum([Q.num_questions for Q in self.get_sections()])
 
   def __call__(self, n):
     if n > self.total_questions():
